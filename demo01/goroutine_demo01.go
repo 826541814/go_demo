@@ -5,29 +5,30 @@ import (
 	"time"
 )
 
-// 数据生产者
-func producter(header string, channel chan<- string, stopCh chan string) {
+// æ°æ®çäº§è
+func producter(header string, channel chan<- string, stopCh chan<- string) {
 	for i := 1; i <= 5; i++ {
 		channel <- fmt.Sprintf("%s:%v", header, i)
-		// time.Sleep(time.Second)
+		stopCh <- fmt.Sprintf("%s:%v stopCh", header, i)
+        // time.Sleep(time.Second)
 	}
-	for i := 1; i <= 5; i++ {
-		fmt.Println("write stopCh")
+	//for i := 1; i <= 5; i++ {
+	//	fmt.Println("write stopCh")
 		// stopCh <- fmt.Sprintf("stopCh:%v", i)
 		// time.Sleep(time.Second)
-		stopCh <- "aaa"
-		fmt.Sprintf("get %s", <-stopCh)
-	}
+	//	stopCh <- "aaa"
+	//	fmt.Sprintf("get %s", <-stopCh)
+	//}
 	// fmt.Println(<-stopCh)
 	// stopCh <- header
-	fmt.Println("输入完成")
+	fmt.Println("è¾å¥å®æ")
 
 }
 
-// 数据消费者
+// æ°æ®æ¶è´¹è
 func consumer(channel <-chan string, stopCh <-chan string) {
 	// for message := range channel {
-	// 	// fmt.Println("回车继续")
+	// 	// fmt.Println("åè½¦ç»§ç»­")
 	// 	// fmt.Scanln()
 	// 	// message := <-channel
 	// 	fmt.Println(message)
@@ -37,7 +38,7 @@ func consumer(channel <-chan string, stopCh <-chan string) {
 	// for {
 	// 	message := <-channel
 	// 	_= <-stopCh
-	// 	fmt.Sprintf("%s 和 %s", message, stop)
+	// 	fmt.Sprintf("%s å %s", message, stop)
 	// }
 	for {
 		select {
@@ -45,7 +46,7 @@ func consumer(channel <-chan string, stopCh <-chan string) {
 			fmt.Println(message)
 		case header := <-stopCh:
 			// break
-			fmt.Sprintf("%s finished", header)
+			fmt.Println(header)
 		// time.Sleep(time.Second)
 		default:
 			time.Sleep(time.Second)
@@ -59,7 +60,7 @@ func consumer(channel <-chan string, stopCh <-chan string) {
 
 func main() {
 	channel := make(chan string)
-	stopCh := make(chan string, 10)
+	stopCh := make(chan string)
 	fmt.Println("start")
 	consumers := consumer
 	// consumers := new func(interface)
