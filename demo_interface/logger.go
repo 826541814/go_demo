@@ -30,5 +30,4 @@ func main(){
 	write = screen
 	logger.RegisterWriter(write)
 	
-	
 }
